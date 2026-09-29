@@ -5,12 +5,14 @@ IDENTIFIED BY 'qwerty123';
 CREATE USER IF NOT EXISTS 'dara.gomez'@'%'
 IDENTIFIED BY '240765';
 
-CREATE USER IF NOT EXISTS 'josu.oloarte'@'%'
-IDENTIFIED BY '240272';
+CREATE USER IF NOT EXISTS 'samuel.vargas'@'%'
+IDENTIFIED BY '240023';
 
 CREATE USER IF NOT EXISTS 'jennifer.canales'@'%'
 IDENTIFIED BY '240556';
 
+CREATE USER IF NOT EXISTS 'gadiel.bobadilla'@'%'
+IDENTIFIED BY '240349';
 
 GRANT ALL PRIVILEGES
 ON *.*
@@ -18,7 +20,7 @@ TO 'dara.gomez'@'%';
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON db_test_7b.*
-TO 'josu.oloarte'@'%';
+TO 'samuel.vargas'@'%';
 
 SET GLOBAL activate_all_roles_on_login = ON;
 
@@ -54,6 +56,7 @@ GRANT SELECT, INSERT, UPDATE
 ON db_test_7b.tb_users
 TO 'seller';
 
+
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON db_test_7b.tb_products
 TO 'seller';
@@ -65,16 +68,24 @@ GRANT 'admin'
 TO 'marco.ramirez'@'%';
 
 GRANT 'support'
-TO 'josu.oloarte'@'%';
+TO 'samuel.vargas'@'%';
 
 GRANT 'seller'
 TO 'jennifer.canales'@'%';
+
+GRANT 'seller'
+TO 'gadiel.bobadilla'@'%'; 
 
 SET DEFAULT ROLE 'admin'
 TO 'marco.ramirez'@'%';
 
 SET DEFAULT ROLE 'support'
-TO 'josu.oloarte'@'%';
+TO 'samuel.vargas'@'%';
+
+SET DEFAULT ROLE 'seller'
+TO 'gadiel.bobadilla'@'%';
+
+
 
 
 FLUSH PRIVILEGES;
