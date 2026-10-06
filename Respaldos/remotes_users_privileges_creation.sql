@@ -11,8 +11,8 @@ IDENTIFIED BY '240023';
 CREATE USER IF NOT EXISTS 'jennifer.canales'@'%'
 IDENTIFIED BY '240556';
 
-CREATE USER IF NOT EXISTS 'gadiel.bobadilla'@'%'
-IDENTIFIED BY '240349';
+CREATE USER IF NOT EXISTS 'obed.vargas'@'%'
+IDENTIFIED BY '240145';
 
 GRANT ALL PRIVILEGES
 ON *.*
@@ -47,16 +47,8 @@ GRANT SELECT, INSERT, UPDATE
 ON db_test_7b.tb_users
 TO 'support';
 
-GRANT SELECT, INSERT, UPDATE
-ON db_test_7b.tb_products
-TO 'support';
 
 -- SELLER
-GRANT SELECT, INSERT, UPDATE
-ON db_test_7b.tb_users
-TO 'seller';
-
-
 GRANT SELECT, INSERT, UPDATE, DELETE
 ON db_test_7b.tb_products
 TO 'seller';
@@ -74,7 +66,7 @@ GRANT 'seller'
 TO 'jennifer.canales'@'%';
 
 GRANT 'seller'
-TO 'gadiel.bobadilla'@'%'; 
+TO 'obed.vargas'@'%'; 
 
 SET DEFAULT ROLE 'admin'
 TO 'marco.ramirez'@'%';
@@ -83,7 +75,7 @@ SET DEFAULT ROLE 'support'
 TO 'samuel.vargas'@'%';
 
 SET DEFAULT ROLE 'seller'
-TO 'gadiel.bobadilla'@'%';
+TO 'obed.vargas'@'%';
 
 
 
