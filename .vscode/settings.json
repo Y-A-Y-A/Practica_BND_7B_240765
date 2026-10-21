@@ -1,3 +1,4 @@
 {
-    "github.copilot.chat.localeOverride": "es"
+    "github.copilot.chat.localeOverride": "es",
+    "liveServer.settings.port": 5501
 }

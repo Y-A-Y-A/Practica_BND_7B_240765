@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres_dara:
+    image: postgres:15-alpine
+    container_name: postgres_dara
+    restart: always
+    environment:
+      POSTGRES_USER: user_40765
+      POSTGRES_PASSWORD: "240765"
+      POSTGRES_DB: db_40765
+    ports:
+      - "40765:5432"
+    volumes:
+      - postgres_data_dara:/var/lib/postgresql/data
+
+  mysql_dara:
+    image: mysql:8.0
+    container_name: mysql_dara
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "240765"
+      MYSQL_DATABASE: db_40766
+      MYSQL_USER: user_40766
+      MYSQL_PASSWORD: "240765"
+    ports:
+      - "40766:3306"
+    volumes:
+      - mysql_data_dara:/var/lib/mysql
+
+  pgadmin_dara:
+    image: dpage/pgadmin4:7.8
+    container_name: pgadmin_dara
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dara@proyectos-integradores-7b-itiid.tech
+      PGADMIN_DEFAULT_PASSWORD: "240765"
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+    ports:
+      - "40764:80"
+    depends_on:
+      - postgres_dara
+
+volumes:
+  postgres_data_dara:
+  mysql_data_dara:
