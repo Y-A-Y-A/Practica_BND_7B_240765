@@ -1,0 +1,2444 @@
+{
+  "data": {
+    "database": "db_test_7b",
+    "source": "db_test_7b (6).sql",
+    "tables": [
+      {
+        "name": "tb_buyer_orders",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "seller_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "tb_buyer_orders_ibfk_1",
+                "columns": [
+                  "seller_ID"
+                ],
+                "target": "tb_users",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "subtotal",
+            "type": "decimal(12,2)",
+            "nullable": false,
+            "default": "'0.00'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "decimal(12,2) NOT NULL DEFAULT '0.00'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "shipping_cost",
+            "type": "decimal(12,2)",
+            "nullable": false,
+            "default": "'0.00'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "decimal(12,2) NOT NULL DEFAULT '0.00'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "fulfillment_status",
+            "type": "enum('Pending','Accepted','Preparing','Sent','Delivered','Canceled','Returned')",
+            "nullable": false,
+            "default": "'Pending'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "enum('Pending','Accepted','Preparing','Sent','Delivered','Canceled','Returned') NOT NULL DEFAULT 'Pending'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "seller_ID",
+            "columns": [
+              "seller_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "tb_buyer_orders_ibfk_1",
+            "columns": [
+              "seller_ID"
+            ],
+            "target": "tb_users",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [
+          "CONSTRAINT `tb_buyer_orders_chk_1` CHECK ((`subtotal` >= 0))",
+          "CONSTRAINT `tb_buyer_orders_chk_2` CHECK ((`shipping_cost` >= 0))"
+        ],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tb_carts",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "user_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": [
+              {
+                "name": "tb_carts_ibfk_1",
+                "columns": [
+                  "user_ID"
+                ],
+                "target": "tb_users",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": true,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "uk_cart_user",
+            "columns": [
+              "user_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "tb_carts_ibfk_1",
+            "columns": [
+              "user_ID"
+            ],
+            "target": "tb_users",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tb_logs",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "table_name",
+            "type": "varchar(80)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(80) NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "table_operation",
+            "type": "enum('Create','Read','Update','Delete')",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "enum('Create','Read','Update','Delete') DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "db_user",
+            "type": "varchar(80)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(80) NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "operation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "operation_description",
+            "type": "text",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "text NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "operation_status",
+            "type": "bit(1)",
+            "nullable": true,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          }
+        ],
+        "fks": [],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": "14339",
+        "rowCount": 14271
+      },
+      {
+        "name": "tb_products",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "SKU",
+            "type": "varchar(50)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(50) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "name",
+            "type": "varchar(250)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(250) NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "nullable": true,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "text",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "current_price",
+            "type": "decimal(10,2)",
+            "nullable": false,
+            "default": "'0.00'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "decimal(10,2) NOT NULL DEFAULT '0.00'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "current_stock",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": "'0'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL DEFAULT '0'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": true,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "SKU",
+            "columns": [
+              "SKU"
+            ]
+          }
+        ],
+        "fks": [],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": "6008",
+        "rowCount": 6007
+      },
+      {
+        "name": "tb_users",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "email",
+            "type": "varchar(100)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(100) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "nick",
+            "type": "varchar(50)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(50) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "password",
+            "type": "varchar(255)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(255) NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_login",
+            "type": "datetime",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": true,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "email",
+            "columns": [
+              "email"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "nick",
+            "columns": [
+              "nick"
+            ]
+          }
+        ],
+        "fks": [],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": "15",
+        "rowCount": 6
+      },
+      {
+        "name": "tbc_categories",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "name",
+            "type": "varchar(120)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(120) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "nullable": true,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "text",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "sup_id_category",
+            "type": "int unsigned",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_sup_id_category",
+                "columns": [
+                  "sup_id_category"
+                ],
+                "target": "tbc_categories",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "name",
+            "columns": [
+              "name"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_sup_id_category",
+            "columns": [
+              "sup_id_category"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_sup_id_category",
+            "columns": [
+              "sup_id_category"
+            ],
+            "target": "tbc_categories",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": "101",
+        "rowCount": 100
+      },
+      {
+        "name": "tbc_payment_methods",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "code",
+            "type": "varchar(30)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(30) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "text NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "code_UNIQUE",
+            "columns": [
+              "code"
+            ]
+          }
+        ],
+        "fks": [],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tbd_carts_items",
+        "columns": [
+          {
+            "name": "cart_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_cart_items_cart",
+                "columns": [
+                  "cart_ID"
+                ],
+                "target": "tb_carts",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "provider_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_cart_items_provider_product",
+                "columns": [
+                  "provider_ID",
+                  "product_ID"
+                ],
+                "target": "tbd_produtcs_users_providers",
+                "targetColumns": [
+                  "user_ID",
+                  "product_ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "product_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_cart_items_provider_product",
+                "columns": [
+                  "provider_ID",
+                  "product_ID"
+                ],
+                "target": "tbd_produtcs_users_providers",
+                "targetColumns": [
+                  "user_ID",
+                  "product_ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "quantity",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": "'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL DEFAULT '1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "cart_ID",
+              "provider_ID",
+              "product_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_cart_items_provider_product",
+            "columns": [
+              "provider_ID",
+              "product_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_cart_items_cart",
+            "columns": [
+              "cart_ID"
+            ],
+            "target": "tb_carts",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_cart_items_provider_product",
+            "columns": [
+              "provider_ID",
+              "product_ID"
+            ],
+            "target": "tbd_produtcs_users_providers",
+            "targetColumns": [
+              "user_ID",
+              "product_ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [
+          "CONSTRAINT `chk_cart_quantity` CHECK ((`quantity` > 0))"
+        ],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tbd_order_items",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "seller_order_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_order_items_order",
+                "columns": [
+                  "seller_order_ID"
+                ],
+                "target": "tb_buyer_orders",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "product_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_order_items_product",
+                "columns": [
+                  "product_ID"
+                ],
+                "target": "tb_products",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "provider_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_order_items_provider",
+                "columns": [
+                  "provider_ID"
+                ],
+                "target": "tb_users",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "product_name",
+            "type": "varchar(255)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(255) NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "quantity",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "unit_price",
+            "type": "decimal(12,2)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "decimal(12,2) NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "subtotal",
+            "type": "decimal(12,2)",
+            "nullable": true,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "decimal(12,2) GENERATED ALWAYS AS ((`quantity` * `unit_price`)) STORED",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "seller_order_ID",
+            "columns": [
+              "seller_order_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "product_ID",
+            "columns": [
+              "product_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "provider_ID",
+            "columns": [
+              "provider_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_order_items_order",
+            "columns": [
+              "seller_order_ID"
+            ],
+            "target": "tb_buyer_orders",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_order_items_product",
+            "columns": [
+              "product_ID"
+            ],
+            "target": "tb_products",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_order_items_provider",
+            "columns": [
+              "provider_ID"
+            ],
+            "target": "tb_users",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [
+          "CONSTRAINT `chk_order_items_quantity` CHECK ((`quantity` > 0))",
+          "CONSTRAINT `chk_order_items_unit_price` CHECK ((`unit_price` >= 0))"
+        ],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tbd_products_categories",
+        "columns": [
+          {
+            "name": "category_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_category",
+                "columns": [
+                  "category_ID"
+                ],
+                "target": "tbc_categories",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "product_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_product",
+                "columns": [
+                  "product_ID"
+                ],
+                "target": "tb_products",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "category_ID",
+              "product_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_product",
+            "columns": [
+              "product_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_category",
+            "columns": [
+              "category_ID"
+            ],
+            "target": "tbc_categories",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_product",
+            "columns": [
+              "product_ID"
+            ],
+            "target": "tb_products",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 8154
+      },
+      {
+        "name": "tbd_produtcs_users_providers",
+        "columns": [
+          {
+            "name": "user_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_user1",
+                "columns": [
+                  "user_ID"
+                ],
+                "target": "tb_users",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "product_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_products2",
+                "columns": [
+                  "product_ID"
+                ],
+                "target": "tb_products",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "type_ownership",
+            "type": "enum('Owner','Reseller','Distributor')",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "enum('Owner','Reseller','Distributor') DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "avalaible_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "user_ID",
+              "product_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_products2",
+            "columns": [
+              "product_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_products2",
+            "columns": [
+              "product_ID"
+            ],
+            "target": "tb_products",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_user1",
+            "columns": [
+              "user_ID"
+            ],
+            "target": "tb_users",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tbd_user_payment_methods",
+        "columns": [
+          {
+            "name": "ID",
+            "type": "bigint unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": true,
+            "onUpdate": null,
+            "raw": "bigint unsigned NOT NULL AUTO_INCREMENT",
+            "pk": true,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "user_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_user_payment_methods_user",
+                "columns": [
+                  "user_ID"
+                ],
+                "target": "tb_users",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "payment_method_type_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_user_payment_methods",
+                "columns": [
+                  "payment_method_type_ID"
+                ],
+                "target": "tbc_payment_methods",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "provider",
+            "type": "varchar(50)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(50) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "provider_method_ref",
+            "type": "varchar(255)",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(255) NOT NULL",
+            "pk": false,
+            "unique": true,
+            "fk": []
+          },
+          {
+            "name": "label",
+            "type": "varchar(100)",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "varchar(100) DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_four",
+            "type": "char(4)",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "char(4) DEFAULT NULL",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "is_default",
+            "type": "tinyint(1)",
+            "nullable": false,
+            "default": "'0'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "tinyint(1) NOT NULL DEFAULT '0'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": true,
+            "default": "NULL",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "ID"
+            ]
+          },
+          {
+            "type": "UNIQUE",
+            "name": "uk_provider_method",
+            "columns": [
+              "provider",
+              "provider_method_ref"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_user_payment_methods_user",
+            "columns": [
+              "user_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_user_payment_methods",
+            "columns": [
+              "payment_method_type_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_user_payment_methods",
+            "columns": [
+              "payment_method_type_ID"
+            ],
+            "target": "tbc_payment_methods",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_user_payment_methods_user",
+            "columns": [
+              "user_ID"
+            ],
+            "target": "tb_users",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      },
+      {
+        "name": "tbd_users_wishlist_products",
+        "columns": [
+          {
+            "name": "user_ID",
+            "type": "int",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_user2",
+                "columns": [
+                  "user_ID"
+                ],
+                "target": "tb_users",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "product_ID",
+            "type": "int unsigned",
+            "nullable": false,
+            "default": null,
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "int unsigned NOT NULL",
+            "pk": true,
+            "unique": false,
+            "fk": [
+              {
+                "name": "fk_products1",
+                "columns": [
+                  "product_ID"
+                ],
+                "target": "tb_products",
+                "targetColumns": [
+                  "ID"
+                ],
+                "onDelete": null,
+                "onUpdate": null
+              }
+            ]
+          },
+          {
+            "name": "status",
+            "type": "bit(1)",
+            "nullable": false,
+            "default": "b'1'",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "bit(1) NOT NULL DEFAULT b'1'",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "creation_date",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": null,
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          },
+          {
+            "name": "last_update",
+            "type": "datetime",
+            "nullable": false,
+            "default": "CURRENT_TIMESTAMP",
+            "autoIncrement": false,
+            "onUpdate": "CURRENT_TIMESTAMP",
+            "raw": "datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+            "pk": false,
+            "unique": false,
+            "fk": []
+          }
+        ],
+        "keys": [
+          {
+            "type": "PRIMARY",
+            "name": "PRIMARY",
+            "columns": [
+              "user_ID",
+              "product_ID"
+            ]
+          },
+          {
+            "type": "INDEX",
+            "name": "fk_products1",
+            "columns": [
+              "product_ID"
+            ]
+          }
+        ],
+        "fks": [
+          {
+            "name": "fk_products1",
+            "columns": [
+              "product_ID"
+            ],
+            "target": "tb_products",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          },
+          {
+            "name": "fk_user2",
+            "columns": [
+              "user_ID"
+            ],
+            "target": "tb_users",
+            "targetColumns": [
+              "ID"
+            ],
+            "onDelete": null,
+            "onUpdate": null
+          }
+        ],
+        "checks": [],
+        "engine": "InnoDB",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_0900_ai_ci",
+        "autoNext": null,
+        "rowCount": 0
+      }
+    ],
+    "edges": [
+      {
+        "id": "tb_buyer_orders:tb_buyer_orders_ibfk_1",
+        "from": "tb_buyer_orders",
+        "to": "tb_users",
+        "name": "tb_buyer_orders_ibfk_1",
+        "columns": [
+          "seller_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tb_carts:tb_carts_ibfk_1",
+        "from": "tb_carts",
+        "to": "tb_users",
+        "name": "tb_carts_ibfk_1",
+        "columns": [
+          "user_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "1:1",
+        "parentOne": true,
+        "childUnique": true,
+        "optional": false
+      },
+      {
+        "id": "tbc_categories:fk_sup_id_category",
+        "from": "tbc_categories",
+        "to": "tbc_categories",
+        "name": "fk_sup_id_category",
+        "columns": [
+          "sup_id_category"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": true
+      },
+      {
+        "id": "tbd_carts_items:fk_cart_items_cart",
+        "from": "tbd_carts_items",
+        "to": "tb_carts",
+        "name": "fk_cart_items_cart",
+        "columns": [
+          "cart_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_carts_items:fk_cart_items_provider_product",
+        "from": "tbd_carts_items",
+        "to": "tbd_produtcs_users_providers",
+        "name": "fk_cart_items_provider_product",
+        "columns": [
+          "provider_ID",
+          "product_ID"
+        ],
+        "targetColumns": [
+          "user_ID",
+          "product_ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_order_items:fk_order_items_order",
+        "from": "tbd_order_items",
+        "to": "tb_buyer_orders",
+        "name": "fk_order_items_order",
+        "columns": [
+          "seller_order_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_order_items:fk_order_items_product",
+        "from": "tbd_order_items",
+        "to": "tb_products",
+        "name": "fk_order_items_product",
+        "columns": [
+          "product_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_order_items:fk_order_items_provider",
+        "from": "tbd_order_items",
+        "to": "tb_users",
+        "name": "fk_order_items_provider",
+        "columns": [
+          "provider_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_products_categories:fk_category",
+        "from": "tbd_products_categories",
+        "to": "tbc_categories",
+        "name": "fk_category",
+        "columns": [
+          "category_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_products_categories:fk_product",
+        "from": "tbd_products_categories",
+        "to": "tb_products",
+        "name": "fk_product",
+        "columns": [
+          "product_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_produtcs_users_providers:fk_products2",
+        "from": "tbd_produtcs_users_providers",
+        "to": "tb_products",
+        "name": "fk_products2",
+        "columns": [
+          "product_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_produtcs_users_providers:fk_user1",
+        "from": "tbd_produtcs_users_providers",
+        "to": "tb_users",
+        "name": "fk_user1",
+        "columns": [
+          "user_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_user_payment_methods:fk_user_payment_methods",
+        "from": "tbd_user_payment_methods",
+        "to": "tbc_payment_methods",
+        "name": "fk_user_payment_methods",
+        "columns": [
+          "payment_method_type_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_user_payment_methods:fk_user_payment_methods_user",
+        "from": "tbd_user_payment_methods",
+        "to": "tb_users",
+        "name": "fk_user_payment_methods_user",
+        "columns": [
+          "user_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_users_wishlist_products:fk_products1",
+        "from": "tbd_users_wishlist_products",
+        "to": "tb_products",
+        "name": "fk_products1",
+        "columns": [
+          "product_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      },
+      {
+        "id": "tbd_users_wishlist_products:fk_user2",
+        "from": "tbd_users_wishlist_products",
+        "to": "tb_users",
+        "name": "fk_user2",
+        "columns": [
+          "user_ID"
+        ],
+        "targetColumns": [
+          "ID"
+        ],
+        "onDelete": null,
+        "onUpdate": null,
+        "declared": true,
+        "cardinality": "N:1",
+        "parentOne": true,
+        "childUnique": false,
+        "optional": false
+      }
+    ],
+    "triggers": [
+      {
+        "name": "trg_buyer_orders_after_insert",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tb_buyer_orders",
+        "body": "INSERT INTO tb_audit_log (\r\n        table_name,\r\n        action_type,\r\n        record_ID,\r\n        action_date\r\n    )\r\n    VALUES (\r\n        'tb_buyer_orders',\r\n        'INSERT',\r\n        NEW.ID,\r\n        NOW()\r\n    );"
+      },
+      {
+        "name": "trg_buyer_orders_after_update",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tb_buyer_orders",
+        "body": "INSERT INTO tb_audit_log (\r\n        table_name,\r\n        action_type,\r\n        record_ID,\r\n        action_date\r\n    )\r\n    VALUES (\r\n        'tb_buyer_orders',\r\n        'UPDATE',\r\n        NEW.ID,\r\n        NOW()\r\n    );"
+      },
+      {
+        "name": "trg_buyer_orders_after_delete",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tb_buyer_orders",
+        "body": "INSERT INTO tb_audit_log (\r\n        table_name,\r\n        action_type,\r\n        record_ID,\r\n        action_date\r\n    )\r\n    VALUES (\r\n        'tb_buyer_orders',\r\n        'DELETE',\r\n        OLD.ID,\r\n        NOW()\r\n    );"
+      },
+      {
+        "name": "trg_carts_items_after_insert",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_carts_items",
+        "body": "INSERT INTO tb_carts_items_audit (\r\n        cart_ID,\r\n        provider_ID,\r\n        product_ID,\r\n        action_type,\r\n        old_quantity,\r\n        new_quantity,\r\n        action_date\r\n    )\r\n    VALUES (\r\n        NEW.cart_ID,\r\n        NEW.provider_ID,\r\n        NEW.product_ID,\r\n        'INSERT',\r\n        NULL,\r\n        NEW.quantity,\r\n        CURRENT_TIMESTAMP\r\n    );"
+      },
+      {
+        "name": "trg_carts_items_after_update",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_carts_items",
+        "body": "INSERT INTO tb_carts_items_audit (\r\n        cart_ID,\r\n        provider_ID,\r\n        product_ID,\r\n        action_type,\r\n        old_quantity,\r\n        new_quantity,\r\n        action_date\r\n    )\r\n    VALUES (\r\n        NEW.cart_ID,\r\n        NEW.provider_ID,\r\n        NEW.product_ID,\r\n        'UPDATE',\r\n        OLD.quantity,\r\n        NEW.quantity,\r\n        CURRENT_TIMESTAMP\r\n    );"
+      },
+      {
+        "name": "trg_carts_items_after_delete",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_carts_items",
+        "body": "INSERT INTO tb_carts_items_audit (\r\n        cart_ID,\r\n        provider_ID,\r\n        product_ID,\r\n        action_type,\r\n        old_quantity,\r\n        new_quantity,\r\n        action_date\r\n    )\r\n    VALUES (\r\n        OLD.cart_ID,\r\n        OLD.provider_ID,\r\n        OLD.product_ID,\r\n        'DELETE',\r\n        OLD.quantity,\r\n        NULL,\r\n        CURRENT_TIMESTAMP\r\n    );"
+      },
+      {
+        "name": "trg_order_items_after_insert",
+        "timing": "AFTER",
+        "event": "INSERT",
+        "table": "tbd_order_items",
+        "body": "INSERT INTO `tb_order_items_audit` (\r\n        `order_item_ID`,\r\n        `seller_order_ID`,\r\n        `product_ID`,\r\n        `provider_ID`,\r\n        `action_type`,\r\n        `new_quantity`,\r\n        `new_unit_price`\r\n    )\r\n    VALUES (\r\n        NEW.ID,\r\n        NEW.seller_order_ID,\r\n        NEW.product_ID,\r\n        NEW.provider_ID,\r\n        'INSERT',\r\n        NEW.quantity,\r\n        NEW.unit_price\r\n    );"
+      },
+      {
+        "name": "trg_order_items_after_update",
+        "timing": "AFTER",
+        "event": "UPDATE",
+        "table": "tbd_order_items",
+        "body": "INSERT INTO `tb_order_items_audit` (\r\n        `order_item_ID`,\r\n        `seller_order_ID`,\r\n        `product_ID`,\r\n        `provider_ID`,\r\n        `action_type`,\r\n        `old_quantity`,\r\n        `new_quantity`,\r\n        `old_unit_price`,\r\n        `new_unit_price`\r\n    )\r\n    VALUES (\r\n        NEW.ID,\r\n        NEW.seller_order_ID,\r\n        NEW.product_ID,\r\n        NEW.provider_ID,\r\n        'UPDATE',\r\n        OLD.quantity,\r\n        NEW.quantity,\r\n        OLD.unit_price,\r\n        NEW.unit_price\r\n    );"
+      },
+      {
+        "name": "trg_order_items_after_delete",
+        "timing": "AFTER",
+        "event": "DELETE",
+        "table": "tbd_order_items",
+        "body": "INSERT INTO `tb_order_items_audit` (\r\n        `order_item_ID`,\r\n        `seller_order_ID`,\r\n        `product_ID`,\r\n        `provider_ID`,\r\n        `action_type`,\r\n        `old_quantity`,\r\n        `old_unit_price`\r\n    )\r\n    VALUES (\r\n        OLD.ID,\r\n        OLD.seller_order_ID,\r\n        OLD.product_ID,\r\n        OLD.provider_ID,\r\n        'DELETE',\r\n        OLD.quantity,\r\n        OLD.unit_price\r\n    );"
+      }
+    ],
+    "views": [
+      {
+        "name": "vw_trazabilidad_categories",
+        "columns": [
+          "id",
+          "name",
+          "description",
+          "sup_id_category",
+          "status",
+          "creation_date",
+          "last_update",
+          "performed_by",
+          "roles",
+          "operation",
+          "operation_description",
+          "operation_date",
+          "operation_status"
+        ],
+        "tables": [
+          "tb_logs",
+          "tbc_categories",
+          "mysql.role_edges"
+        ],
+        "definition": "select `c`.`ID` AS `id`,`c`.`name` AS `name`,`c`.`description` AS `description`,`c`.`sup_id_category` AS `sup_id_category`,`c`.`status` AS `status`,`c`.`creation_date` AS `creation_date`,`c`.`last_update` AS `last_update`,`l`.`db_user` AS `performed_by`,coalesce(group_concat(distinct `re`.`FROM_USER` order by `re`.`FROM_USER` ASC separator ', '),'Sin rol') AS `roles`,`l`.`table_operation` AS `operation`,`l`.`operation_description` AS `operation_description`,`l`.`operation_date` AS `operation_date`,`l`.`operation_status` AS `operation_status` from ((`tbc_categories` `c` left join `tb_logs` `l` on((`l`.`table_name` = 'tb_categories'))) left join `mysql`.`role_edges` `re` on((`re`.`TO_USER` = substring_index(`l`.`db_user`,'@',1)))) group by `c`.`ID`,`c`.`name`,`c`.`description`,`c`.`sup_id_category`,`c`.`status`,`c`.`creation_date`,`c`.`last_update`,`l`.`db_user`,`l`.`table_operation`,`l`.`operation_description`,`l`.`operation_date`,`l`.`operation_status`"
+      },
+      {
+        "name": "vw_trazabilidad_productos",
+        "columns": [
+          "id",
+          "sku",
+          "name",
+          "description",
+          "current_price",
+          "current_stock",
+          "status",
+          "user_operation",
+          "roles",
+          "operation",
+          "operation_description",
+          "operation_date",
+          "operation_status"
+        ],
+        "tables": [
+          "tb_logs",
+          "tb_products",
+          "mysql.role_edges"
+        ],
+        "definition": "select `p`.`ID` AS `id`,`p`.`SKU` AS `sku`,`p`.`name` AS `name`,`p`.`description` AS `description`,`p`.`current_price` AS `current_price`,`p`.`current_stock` AS `current_stock`,`p`.`status` AS `status`,`b`.`db_user` AS `user_operation`,coalesce(group_concat(distinct `re`.`FROM_USER` order by `re`.`FROM_USER` ASC separator ', '),'Sin rol') AS `roles`,`b`.`table_operation` AS `operation`,`b`.`operation_description` AS `operation_description`,`b`.`operation_date` AS `operation_date`,`b`.`operation_status` AS `operation_status` from ((`tb_products` `p` join `tb_logs` `b` on(((`b`.`table_name` = 'tb_products') and (`b`.`operation_description` like concat('%SKU: ',`p`.`SKU`,'%'))))) left join `mysql`.`role_edges` `re` on((`re`.`TO_USER` = substring_index(`b`.`db_user`,'@',1)))) group by `p`.`ID`,`p`.`SKU`,`p`.`name`,`p`.`description`,`p`.`current_price`,`p`.`current_stock`,`p`.`status`,`b`.`db_user`,`b`.`table_operation`,`b`.`operation_description`,`b`.`operation_date`,`b`.`operation_status`"
+      },
+      {
+        "name": "vw_trazabilidad_products_categories",
+        "columns": [
+          "category_id",
+          "product_id",
+          "status",
+          "creation_date",
+          "last_update",
+          "performed_by",
+          "roles",
+          "operation",
+          "operation_description",
+          "operation_date",
+          "operation_status"
+        ],
+        "tables": [
+          "tb_logs",
+          "tbd_products_categories",
+          "mysql.role_edges"
+        ],
+        "definition": "select `pc`.`category_ID` AS `category_id`,`pc`.`product_ID` AS `product_id`,`pc`.`status` AS `status`,`pc`.`creation_date` AS `creation_date`,`pc`.`last_update` AS `last_update`,`l`.`db_user` AS `performed_by`,coalesce(group_concat(distinct `re`.`FROM_USER` order by `re`.`FROM_USER` ASC separator ', '),'Sin rol') AS `roles`,`l`.`table_operation` AS `operation`,`l`.`operation_description` AS `operation_description`,`l`.`operation_date` AS `operation_date`,`l`.`operation_status` AS `operation_status` from ((`tbd_products_categories` `pc` left join `tb_logs` `l` on((`l`.`table_name` = 'tbd_products_categories'))) left join `mysql`.`role_edges` `re` on((`re`.`TO_USER` = substring_index(`l`.`db_user`,'@',1)))) group by `pc`.`category_ID`,`pc`.`product_ID`,`pc`.`status`,`pc`.`creation_date`,`pc`.`last_update`,`l`.`db_user`,`l`.`table_operation`,`l`.`operation_description`,`l`.`operation_date`,`l`.`operation_status`"
+      },
+      {
+        "name": "vw_trazabilidad_users",
+        "columns": [
+          "id",
+          "email",
+          "nick",
+          "creation_date",
+          "last_update",
+          "last_login",
+          "status",
+          "performed_by",
+          "roles",
+          "operation",
+          "operation_description",
+          "operation_date",
+          "operation_status"
+        ],
+        "tables": [
+          "tb_logs",
+          "tb_users",
+          "mysql.role_edges"
+        ],
+        "definition": "select `u`.`ID` AS `id`,`u`.`email` AS `email`,`u`.`nick` AS `nick`,`u`.`creation_date` AS `creation_date`,`u`.`last_update` AS `last_update`,`u`.`last_login` AS `last_login`,`u`.`status` AS `status`,`l`.`db_user` AS `performed_by`,coalesce(group_concat(distinct `re`.`FROM_USER` order by `re`.`FROM_USER` ASC separator ', '),'Sin rol') AS `roles`,`l`.`table_operation` AS `operation`,`l`.`operation_description` AS `operation_description`,`l`.`operation_date` AS `operation_date`,`l`.`operation_status` AS `operation_status` from ((`tb_users` `u` left join `tb_logs` `l` on(((`l`.`table_name` = 'tb_users') and (`l`.`db_user` = `u`.`email`)))) left join `mysql`.`role_edges` `re` on((`re`.`TO_USER` = substring_index(`l`.`db_user`,'@',1)))) group by `u`.`ID`,`u`.`email`,`u`.`nick`,`u`.`creation_date`,`u`.`last_update`,`u`.`last_login`,`u`.`status`,`l`.`db_user`,`l`.`table_operation`,`l`.`operation_description`,`l`.`operation_date`,`l`.`operation_status`"
+      }
+    ],
+    "counts": {
+      "columns": 92,
+      "rows": 28538,
+      "primary": 13,
+      "foreign": 16
+    }
+  },
+  "descriptions": {
+    "tb_buyer_orders": "Pedidos colocados por usuarios que actúan como compradores/vendedores según seller_ID.",
+    "tb_carts": "Carritos asociados a una cuenta de usuario.",
+    "tb_logs": "Registro de operaciones descritas en la aplicación.",
+    "tb_products": "Catálogo de productos, precios y existencias.",
+    "tb_users": "Cuentas de usuario y sus datos de acceso.",
+    "tbc_categories": "Categorías del catálogo, con posible jerarquía.",
+    "tbc_payment_methods": "Tipos de método de pago disponibles.",
+    "tbd_carts_items": "Productos y cantidades asociados a carritos.",
+    "tbd_order_items": "Detalle de productos incluidos en pedidos.",
+    "tbd_products_categories": "Asociación entre productos y categorías.",
+    "tbd_produtcs_users_providers": "Asociación de productos con usuarios proveedores y tipo de propiedad (nombre original conservado).",
+    "tbd_user_payment_methods": "Métodos de pago vinculados a usuarios y referencias del proveedor.",
+    "tbd_users_wishlist_products": "Productos guardados por usuarios en una lista de deseos."
+  }
+}
