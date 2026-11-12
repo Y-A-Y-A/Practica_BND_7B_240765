@@ -2106,6 +2106,1123 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
+-- Additional tables and triggers from db_test_7b (10).sql
+
+--
+-- Table structure for table `tb_cancellations`
+--
+
+DROP TABLE IF EXISTS `tb_cancellations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_cancellations` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `buyer_order_ID` int unsigned NOT NULL,
+  `user_ID` int NOT NULL,
+  `cancellation_reason` varchar(500) NOT NULL,
+  `cancellation_status` enum('Requested','Approved','Rejected','Completed') NOT NULL DEFAULT 'Requested',
+  `requested_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `resolved_date` datetime DEFAULT NULL,
+  `resolution_notes` text,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `idx_cancellation_order` (`buyer_order_ID`),
+  KEY `idx_cancellation_user` (`user_ID`),
+  CONSTRAINT `fk_cancellations_order` FOREIGN KEY (`buyer_order_ID`) REFERENCES `tb_buyer_orders` (`ID`),
+  CONSTRAINT `fk_cancellations_user` FOREIGN KEY (`user_ID`) REFERENCES `tb_users` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_cancellations`
+--
+
+LOCK TABLES `tb_cancellations` WRITE;
+/*!40000 ALTER TABLE `tb_cancellations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_cancellations` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_cancellations_after_insert` AFTER INSERT ON `tb_cancellations` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_cancellations', 'Create', USER(),
+         CONCAT('Cancelacion creada. ID=', NEW.ID,
+                ', pedido=', NEW.buyer_order_ID,
+                ', usuario=', NEW.user_ID,
+                ', estado=', NEW.cancellation_status,
+                ', motivo=', NEW.cancellation_reason),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_cancellations_after_update` AFTER UPDATE ON `tb_cancellations` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_cancellations', 'Update', USER(),
+         CONCAT('Cancelacion ID=', NEW.ID,
+                ', pedido=', NEW.buyer_order_ID,
+                ', estado: ', OLD.cancellation_status, ' -> ',
+                NEW.cancellation_status,
+                ', motivo: ', OLD.cancellation_reason, ' -> ',
+                NEW.cancellation_reason),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_cancellations_after_delete` AFTER DELETE ON `tb_cancellations` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_cancellations', 'Delete', USER(),
+         CONCAT('Cancelacion eliminada. ID=', OLD.ID,
+                ', pedido=', OLD.buyer_order_ID,
+                ', usuario=', OLD.user_ID,
+                ', estado=', OLD.cancellation_status),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tb_payment_methods`
+--
+
+DROP TABLE IF EXISTS `tb_payment_methods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_payment_methods` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `order_ID` int unsigned NOT NULL,
+  `user_ID` int NOT NULL,
+  `payment_method_type_ID` int unsigned NOT NULL,
+  `payment_reference` varchar(150) DEFAULT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `currency` char(3) NOT NULL DEFAULT 'MXN',
+  `payment_status` enum('Pending','Authorized','Paid','Failed','Cancelled','Refunded') NOT NULL DEFAULT 'Pending',
+  `payment_date` datetime DEFAULT NULL,
+  `notes` text,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `idx_payment_methods_order` (`order_ID`),
+  KEY `idx_payment_methods_user` (`user_ID`),
+  KEY `idx_payment_methods_type` (`payment_method_type_ID`),
+  CONSTRAINT `fk_payment_methods_type` FOREIGN KEY (`payment_method_type_ID`) REFERENCES `tbc_payment_methods_types` (`ID`),
+  CONSTRAINT `fk_payment_methods_user` FOREIGN KEY (`user_ID`) REFERENCES `tb_users` (`ID`),
+  CONSTRAINT `chk_payment_methods_amount` CHECK ((`amount` > 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_payment_methods`
+--
+
+LOCK TABLES `tb_payment_methods` WRITE;
+/*!40000 ALTER TABLE `tb_payment_methods` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_payment_methods` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payment_methods_ai` AFTER INSERT ON `tb_payment_methods` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tb_payment_methods', 'Create', USER(),
+     CONCAT('Registro de pago creado. ID=', NEW.ID,
+       ', pedido=', NEW.order_ID,
+       ', usuario=', NEW.user_ID,
+       ', tipo=', NEW.payment_method_type_ID,
+       ', importe=', NEW.amount, ' ', NEW.currency,
+       ', estado=', NEW.payment_status),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payment_methods_au` AFTER UPDATE ON `tb_payment_methods` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tb_payment_methods', 'Update', USER(),
+     CONCAT('Registro de pago ID=', NEW.ID,
+       ', estado: ', OLD.payment_status, ' -> ',
+       NEW.payment_status,
+       ', importe: ', OLD.amount, ' -> ', NEW.amount,
+       ', referencia: ',
+       COALESCE(OLD.payment_reference, 'N/D'), ' -> ',
+       COALESCE(NEW.payment_reference, 'N/D')),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payment_methods_ad` AFTER DELETE ON `tb_payment_methods` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tb_payment_methods', 'Delete', USER(),
+     CONCAT('Registro de pago eliminado. ID=', OLD.ID,
+       ', pedido=', OLD.order_ID,
+       ', importe=', OLD.amount, ' ', OLD.currency,
+       ', estado=', OLD.payment_status),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tb_payment_transactions`
+--
+
+DROP TABLE IF EXISTS `tb_payment_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_payment_transactions` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `payment_ID` int unsigned NOT NULL,
+  `event_type` enum('Created','Authorized','Captured','Failed','Refunded','PartiallyRefunded') NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `event_reference` varchar(150) DEFAULT NULL,
+  `remarks` text,
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `fk_transactions_payments` (`payment_ID`),
+  CONSTRAINT `fk_transactions_payments` FOREIGN KEY (`payment_ID`) REFERENCES `tb_payments` (`ID`),
+  CONSTRAINT `chk_transaction_amount` CHECK ((`amount` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_payment_transactions`
+--
+
+LOCK TABLES `tb_payment_transactions` WRITE;
+/*!40000 ALTER TABLE `tb_payment_transactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_payment_transactions` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payment_transactions_ai` AFTER INSERT ON `tb_payment_transactions` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_payment_transactions', 'Create', USER(),
+         CONCAT(
+             'Transacción creada. ID=', NEW.ID,
+             ', pago relacionado=', NEW.payment_ID,
+             ', evento=', NEW.event_type,
+             ', importe=', NEW.amount,
+             ', referencia=', COALESCE(NEW.event_reference, 'N/A')
+         ),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payment_transactions_au` AFTER UPDATE ON `tb_payment_transactions` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_payment_transactions', 'Update', USER(),
+         CONCAT(
+             'Transacción actualizada. ID=', NEW.ID,
+             ', pago relacionado=', NEW.payment_ID,
+             ', evento anterior=', OLD.event_type,
+             ', evento nuevo=', NEW.event_type,
+             ', importe anterior=', OLD.amount,
+             ', importe nuevo=', NEW.amount,
+             ', referencia nueva=',
+             COALESCE(NEW.event_reference, 'N/A')
+         ),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payment_transactions_ad` AFTER DELETE ON `tb_payment_transactions` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_payment_transactions', 'Delete', USER(),
+         CONCAT(
+             'Transacción eliminada. ID=', OLD.ID,
+             ', pago relacionado=', OLD.payment_ID,
+             ', evento=', OLD.event_type,
+             ', importe=', OLD.amount,
+             ', referencia=',
+             COALESCE(OLD.event_reference, 'N/A')
+         ),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tb_payments`
+--
+
+DROP TABLE IF EXISTS `tb_payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_payments` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `order_ID` int unsigned NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `currency` char(3) NOT NULL DEFAULT 'MXN',
+  `payment_method` enum('Card','SPEI','Transfer','Cash') NOT NULL,
+  `provider` varchar(50) DEFAULT NULL,
+  `provider_reference` varchar(150) DEFAULT NULL,
+  `payment_status` enum('Pending','Authorized','Paid','Failed','Refunded','PartiallyRefunded') NOT NULL DEFAULT 'Pending',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `paid_date` datetime DEFAULT NULL,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `uk_payment_reference` (`provider`,`provider_reference`),
+  KEY `fk_payments_buyer_orders` (`order_ID`),
+  CONSTRAINT `fk_payments_buyer_orders` FOREIGN KEY (`order_ID`) REFERENCES `tb_buyer_orders` (`ID`),
+  CONSTRAINT `chk_payment_amount` CHECK ((`amount` > 0))
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_payments`
+--
+
+LOCK TABLES `tb_payments` WRITE;
+/*!40000 ALTER TABLE `tb_payments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_payments` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payments_ai` AFTER INSERT ON `tb_payments` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_payments', 'Create', USER(),
+         CONCAT(
+             'Pago creado. ID=', NEW.ID,
+             ', pedido=', NEW.order_ID,
+             ', importe=', NEW.amount, ' ', NEW.currency,
+             ', método=', NEW.payment_method,
+             ', estado=', NEW.payment_status
+         ),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payments_au` AFTER UPDATE ON `tb_payments` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_payments', 'Update', USER(),
+         CONCAT(
+             'Pago actualizado. ID=', NEW.ID,
+             ', pedido=', NEW.order_ID,
+             ', importe anterior=', OLD.amount, ' ', OLD.currency,
+             ', importe nuevo=', NEW.amount, ' ', NEW.currency,
+             ', estado anterior=', OLD.payment_status,
+             ', estado nuevo=', NEW.payment_status,
+             ', método nuevo=', NEW.payment_method
+         ),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_payments_ad` AFTER DELETE ON `tb_payments` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_payments', 'Delete', USER(),
+         CONCAT(
+             'Pago eliminado. ID=', OLD.ID,
+             ', pedido=', OLD.order_ID,
+             ', importe=', OLD.amount, ' ', OLD.currency,
+             ', método=', OLD.payment_method,
+             ', estado=', OLD.payment_status
+         ),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tb_refunds`
+--
+
+DROP TABLE IF EXISTS `tb_refunds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_refunds` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `payment_ID` int unsigned NOT NULL,
+  `cancellation_ID` int unsigned DEFAULT NULL,
+  `return_ID` int unsigned DEFAULT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `currency` char(3) NOT NULL DEFAULT 'MXN',
+  `refund_reason` varchar(500) NOT NULL,
+  `refund_status` enum('Requested','Approved','Processing','Completed','Rejected','Failed') NOT NULL DEFAULT 'Requested',
+  `provider_reference` varchar(150) DEFAULT NULL,
+  `requested_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `processed_date` datetime DEFAULT NULL,
+  `resolution_notes` text,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `idx_refund_payment` (`payment_ID`),
+  KEY `idx_refund_cancellation` (`cancellation_ID`),
+  KEY `idx_refund_return` (`return_ID`),
+  CONSTRAINT `fk_refunds_cancellation` FOREIGN KEY (`cancellation_ID`) REFERENCES `tb_cancellations` (`ID`),
+  CONSTRAINT `fk_refunds_payment` FOREIGN KEY (`payment_ID`) REFERENCES `tb_payments` (`ID`),
+  CONSTRAINT `fk_refunds_return` FOREIGN KEY (`return_ID`) REFERENCES `tb_returns` (`ID`),
+  CONSTRAINT `chk_refund_amount` CHECK ((`amount` > 0)),
+  CONSTRAINT `chk_refund_origin` CHECK (((`cancellation_ID` is not null) or (`return_ID` is not null)))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_refunds`
+--
+
+LOCK TABLES `tb_refunds` WRITE;
+/*!40000 ALTER TABLE `tb_refunds` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_refunds` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_refunds_after_insert` AFTER INSERT ON `tb_refunds` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_refunds', 'Create', USER(),
+         CONCAT('Reembolso creado. ID=', NEW.ID,
+                ', pago=', NEW.payment_ID,
+                ', cancelacion=', COALESCE(NEW.cancellation_ID, 'N/A'),
+                ', devolucion=', COALESCE(NEW.return_ID, 'N/A'),
+                ', importe=', NEW.amount, ' ', NEW.currency,
+                ', estado=', NEW.refund_status),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_refunds_after_update` AFTER UPDATE ON `tb_refunds` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_refunds', 'Update', USER(),
+         CONCAT('Reembolso ID=', NEW.ID,
+                ', pago=', NEW.payment_ID,
+                ', estado: ', OLD.refund_status, ' -> ',
+                NEW.refund_status,
+                ', importe: ', OLD.amount, ' -> ',
+                NEW.amount, ' ', NEW.currency,
+                ', referencia: ',
+                COALESCE(OLD.provider_reference, 'N/D'), ' -> ',
+                COALESCE(NEW.provider_reference, 'N/D')),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_refunds_after_delete` AFTER DELETE ON `tb_refunds` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_refunds', 'Delete', USER(),
+         CONCAT('Reembolso eliminado. ID=', OLD.ID,
+                ', pago=', OLD.payment_ID,
+                ', importe=', OLD.amount, ' ', OLD.currency,
+                ', estado=', OLD.refund_status),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tb_returns`
+--
+
+DROP TABLE IF EXISTS `tb_returns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_returns` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `buyer_order_ID` int unsigned NOT NULL,
+  `order_item_ID` int unsigned NOT NULL,
+  `user_ID` int NOT NULL,
+  `quantity` int unsigned NOT NULL DEFAULT '1',
+  `return_reason` varchar(500) NOT NULL,
+  `return_status` enum('Requested','Authorized','Rejected','InTransit','Received','Inspected','Completed') NOT NULL DEFAULT 'Requested',
+  `requested_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `received_date` datetime DEFAULT NULL,
+  `resolved_date` datetime DEFAULT NULL,
+  `resolution_notes` text,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `idx_return_order` (`buyer_order_ID`),
+  KEY `idx_return_item` (`order_item_ID`),
+  KEY `idx_return_user` (`user_ID`),
+  CONSTRAINT `fk_returns_item` FOREIGN KEY (`order_item_ID`) REFERENCES `tbd_order_items` (`ID`),
+  CONSTRAINT `fk_returns_order` FOREIGN KEY (`buyer_order_ID`) REFERENCES `tb_buyer_orders` (`ID`),
+  CONSTRAINT `fk_returns_user` FOREIGN KEY (`user_ID`) REFERENCES `tb_users` (`ID`),
+  CONSTRAINT `chk_return_quantity` CHECK ((`quantity` > 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_returns`
+--
+
+LOCK TABLES `tb_returns` WRITE;
+/*!40000 ALTER TABLE `tb_returns` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_returns` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_returns_after_insert` AFTER INSERT ON `tb_returns` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_returns', 'Create', USER(),
+         CONCAT('Devolucion creada. ID=', NEW.ID,
+                ', pedido=', NEW.buyer_order_ID,
+                ', articulo=', NEW.order_item_ID,
+                ', usuario=', NEW.user_ID,
+                ', cantidad=', NEW.quantity,
+                ', estado=', NEW.return_status,
+                ', motivo=', NEW.return_reason),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_returns_after_update` AFTER UPDATE ON `tb_returns` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_returns', 'Update', USER(),
+         CONCAT('Devolucion ID=', NEW.ID,
+                ', pedido=', NEW.buyer_order_ID,
+                ', articulo=', NEW.order_item_ID,
+                ', estado: ', OLD.return_status, ' -> ',
+                NEW.return_status,
+                ', cantidad: ', OLD.quantity, ' -> ',
+                NEW.quantity,
+                ', motivo: ', OLD.return_reason, ' -> ',
+                NEW.return_reason),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_returns_after_delete` AFTER DELETE ON `tb_returns` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_returns', 'Delete', USER(),
+         CONCAT('Devolucion eliminada. ID=', OLD.ID,
+                ', pedido=', OLD.buyer_order_ID,
+                ', articulo=', OLD.order_item_ID,
+                ', cantidad=', OLD.quantity,
+                ', estado=', OLD.return_status),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tb_shipments`
+--
+
+DROP TABLE IF EXISTS `tb_shipments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tb_shipments` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `buyer_order_ID` int unsigned NOT NULL,
+  `address_ID` int unsigned NOT NULL,
+  `carrier` varchar(100) DEFAULT NULL,
+  `tracking_number` varchar(150) DEFAULT NULL,
+  `shipping_cost` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `shipment_status` enum('Pending','Preparing','Shipped','InTransit','Delivered','Failed','Returned') NOT NULL DEFAULT 'Pending',
+  `shipped_date` datetime DEFAULT NULL,
+  `estimated_delivery_date` datetime DEFAULT NULL,
+  `delivered_date` datetime DEFAULT NULL,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `uk_shipment_tracking` (`carrier`,`tracking_number`),
+  KEY `idx_shipment_order` (`buyer_order_ID`),
+  KEY `idx_shipment_address` (`address_ID`),
+  CONSTRAINT `fk_shipments_address` FOREIGN KEY (`address_ID`) REFERENCES `tb_user_addresses` (`ID`),
+  CONSTRAINT `fk_shipments_order` FOREIGN KEY (`buyer_order_ID`) REFERENCES `tb_buyer_orders` (`ID`),
+  CONSTRAINT `chk_shipment_cost` CHECK ((`shipping_cost` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_shipments`
+--
+
+LOCK TABLES `tb_shipments` WRITE;
+/*!40000 ALTER TABLE `tb_shipments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tb_shipments` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_shipments_after_insert` AFTER INSERT ON `tb_shipments` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_shipments', 'Create', USER(),
+         CONCAT('Envio creado. ID=', NEW.ID,
+                ', pedido=', NEW.buyer_order_ID,
+                ', direccion=', NEW.address_ID,
+                ', transportista=', COALESCE(NEW.carrier, 'N/D'),
+                ', rastreo=', COALESCE(NEW.tracking_number, 'N/D'),
+                ', estado=', NEW.shipment_status),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_shipments_after_update` AFTER UPDATE ON `tb_shipments` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_shipments', 'Update', USER(),
+         CONCAT('Envio ID=', NEW.ID,
+                ', estado: ', OLD.shipment_status, ' -> ',
+                NEW.shipment_status,
+                ', rastreo: ',
+                COALESCE(OLD.tracking_number, 'N/D'), ' -> ',
+                COALESCE(NEW.tracking_number, 'N/D'),
+                ', costo: ', OLD.shipping_cost, ' -> ',
+                NEW.shipping_cost),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_shipments_after_delete` AFTER DELETE ON `tb_shipments` FOR EACH ROW BEGIN
+    INSERT INTO tb_logs
+        (table_name, operation, db_users, description,
+         operation_date, operation_status)
+    VALUES
+        ('tb_shipments', 'Delete', USER(),
+         CONCAT('Envio eliminado. ID=', OLD.ID,
+                ', pedido=', OLD.buyer_order_ID,
+                ', rastreo=', COALESCE(OLD.tracking_number, 'N/D'),
+                ', estado=', OLD.shipment_status),
+         NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tbd_cancellation_items`
+--
+
+DROP TABLE IF EXISTS `tbd_cancellation_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbd_cancellation_items` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `cancellation_ID` int unsigned NOT NULL,
+  `order_item_ID` int unsigned NOT NULL,
+  `quantity` int unsigned NOT NULL DEFAULT '1',
+  `unit_amount` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `item_reason` varchar(500) DEFAULT NULL,
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `idx_cancellation_items_cancellation` (`cancellation_ID`),
+  KEY `idx_cancellation_items_order_item` (`order_item_ID`),
+  CONSTRAINT `fk_cancellation_items_cancellation` FOREIGN KEY (`cancellation_ID`) REFERENCES `tb_cancellations` (`ID`),
+  CONSTRAINT `fk_cancellation_items_order_item` FOREIGN KEY (`order_item_ID`) REFERENCES `tbd_order_items` (`ID`),
+  CONSTRAINT `chk_cancellation_items_amount` CHECK ((`unit_amount` >= 0)),
+  CONSTRAINT `chk_cancellation_items_quantity` CHECK ((`quantity` > 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbd_cancellation_items`
+--
+
+LOCK TABLES `tbd_cancellation_items` WRITE;
+/*!40000 ALTER TABLE `tbd_cancellation_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbd_cancellation_items` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_cancellation_items_ai` AFTER INSERT ON `tbd_cancellation_items` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tbd_cancellation_items', 'Create', USER(),
+     CONCAT('Articulo de cancelacion creado. ID=', NEW.ID,
+       ', cancelacion=', NEW.cancellation_ID,
+       ', articulo de pedido=', NEW.order_item_ID,
+       ', cantidad=', NEW.quantity,
+       ', importe unitario=', NEW.unit_amount),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_cancellation_items_au` AFTER UPDATE ON `tbd_cancellation_items` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tbd_cancellation_items', 'Update', USER(),
+     CONCAT('Articulo de cancelacion ID=', NEW.ID,
+       ', cancelacion=', NEW.cancellation_ID,
+       ', cantidad: ', OLD.quantity, ' -> ', NEW.quantity,
+       ', importe unitario: ', OLD.unit_amount, ' -> ',
+       NEW.unit_amount),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_cancellation_items_ad` AFTER DELETE ON `tbd_cancellation_items` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tbd_cancellation_items', 'Delete', USER(),
+     CONCAT('Articulo de cancelacion eliminado. ID=', OLD.ID,
+       ', cancelacion=', OLD.cancellation_ID,
+       ', articulo de pedido=', OLD.order_item_ID,
+       ', cantidad=', OLD.quantity),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
+--
+-- Table structure for table `tbd_return_items`
+--
+
+DROP TABLE IF EXISTS `tbd_return_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbd_return_items` (
+  `ID` int unsigned NOT NULL AUTO_INCREMENT,
+  `return_ID` int unsigned NOT NULL,
+  `order_item_ID` int unsigned NOT NULL,
+  `quantity` int unsigned NOT NULL DEFAULT '1',
+  `unit_amount` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `item_reason` varchar(500) DEFAULT NULL,
+  `item_condition` enum('Unknown','New','Opened','Damaged') NOT NULL DEFAULT 'Unknown',
+  `status` bit(1) NOT NULL DEFAULT b'1',
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID`),
+  KEY `idx_return_items_return` (`return_ID`),
+  KEY `idx_return_items_order_item` (`order_item_ID`),
+  CONSTRAINT `fk_return_items_order_item` FOREIGN KEY (`order_item_ID`) REFERENCES `tbd_order_items` (`ID`),
+  CONSTRAINT `fk_return_items_return` FOREIGN KEY (`return_ID`) REFERENCES `tb_returns` (`ID`),
+  CONSTRAINT `chk_return_items_amount` CHECK ((`unit_amount` >= 0)),
+  CONSTRAINT `chk_return_items_quantity` CHECK ((`quantity` > 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbd_return_items`
+--
+
+LOCK TABLES `tbd_return_items` WRITE;
+/*!40000 ALTER TABLE `tbd_return_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbd_return_items` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_return_items_ai` AFTER INSERT ON `tbd_return_items` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tbd_return_items', 'Create', USER(),
+     CONCAT('Articulo de devolucion creado. ID=', NEW.ID,
+       ', devolucion=', NEW.return_ID,
+       ', articulo de pedido=', NEW.order_item_ID,
+       ', cantidad=', NEW.quantity,
+       ', importe unitario=', NEW.unit_amount,
+       ', condicion=', NEW.item_condition),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_return_items_au` AFTER UPDATE ON `tbd_return_items` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tbd_return_items', 'Update', USER(),
+     CONCAT('Articulo de devolucion ID=', NEW.ID,
+       ', devolucion=', NEW.return_ID,
+       ', cantidad: ', OLD.quantity, ' -> ', NEW.quantity,
+       ', importe unitario: ', OLD.unit_amount, ' -> ',
+       NEW.unit_amount,
+       ', condicion: ', OLD.item_condition, ' -> ',
+       NEW.item_condition),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb3 */ ;
+/*!50003 SET character_set_results = utf8mb3 */ ;
+/*!50003 SET collation_connection  = utf8mb3_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_return_items_ad` AFTER DELETE ON `tbd_return_items` FOR EACH ROW BEGIN
+  INSERT INTO tb_logs
+    (table_name, operation, db_users, description,
+     operation_date, operation_status)
+  VALUES
+    ('tbd_return_items', 'Delete', USER(),
+     CONCAT('Articulo de devolucion eliminado. ID=', OLD.ID,
+       ', devolucion=', OLD.return_ID,
+       ', articulo de pedido=', OLD.order_item_ID,
+       ', cantidad=', OLD.quantity,
+       ', condicion=', OLD.item_condition),
+     NOW(), b'1');
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+
 --
 -- Temporary view structure for view `vw_trazabilidad_address_components`
 --
@@ -2489,6 +3606,139 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `operation_date`,
  1 AS `operation_status`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary view structure for view `vw_trazabilidad_cancellation_items`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_cancellation_items`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_cancellation_items`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_cancellation_items` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `usuario_bd`,
+ 1 AS `descripcion`,
+ 1 AS `fecha_operacion`,
+ 1 AS `estado`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Temporary view structure for view `vw_trazabilidad_cancellations`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_cancellations`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_cancellations`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_cancellations` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `usuario_bd`,
+ 1 AS `descripcion`,
+ 1 AS `fecha_operacion`,
+ 1 AS `estado`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Temporary view structure for view `vw_trazabilidad_refunds`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_refunds`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_refunds`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_refunds` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `usuario_bd`,
+ 1 AS `descripcion`,
+ 1 AS `fecha_operacion`,
+ 1 AS `estado`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Temporary view structure for view `vw_trazabilidad_returns`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_returns`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_returns`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_returns` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `usuario_bd`,
+ 1 AS `descripcion`,
+ 1 AS `fecha_operacion`,
+ 1 AS `estado`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Temporary view structure for view `vw_trazabilidad_shipments`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_shipments`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_shipments`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_shipments` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `usuario_bd`,
+ 1 AS `descripcion`,
+ 1 AS `fecha_operacion`,
+ 1 AS `estado`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Temporary view structure for view `vw_trazabilidad_tb_payment_transactions`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_tb_payment_transactions`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_tb_payment_transactions`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_tb_payment_transactions` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `db_users`,
+ 1 AS `description`,
+ 1 AS `operation_date`,
+ 1 AS `operation_status`*/;
+SET character_set_client = @saved_cs_client;
+
+
+--
+-- Temporary view structure for view `vw_trazabilidad_tb_payments`
+--
+
+DROP TABLE IF EXISTS `vw_trazabilidad_tb_payments`;
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_tb_payments`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `vw_trazabilidad_tb_payments` AS SELECT 
+ 1 AS `log_id`,
+ 1 AS `table_name`,
+ 1 AS `operation`,
+ 1 AS `db_users`,
+ 1 AS `description`,
+ 1 AS `operation_date`,
+ 1 AS `operation_status`*/;
+SET character_set_client = @saved_cs_client;
+
 
 --
 -- Dumping events for database 'db_test_7b'
@@ -3486,6 +4736,139 @@ DELIMITER ;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
+--
+-- Final view structure for view `vw_trazabilidad_cancellation_items`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_cancellation_items`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_cancellation_items` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `usuario_bd`,1 AS `descripcion`,1 AS `fecha_operacion`,1 AS `estado` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
+--
+-- Final view structure for view `vw_trazabilidad_cancellations`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_cancellations`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_cancellations` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `usuario_bd`,1 AS `descripcion`,1 AS `fecha_operacion`,1 AS `estado` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
+--
+-- Final view structure for view `vw_trazabilidad_refunds`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_refunds`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_refunds` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `usuario_bd`,1 AS `descripcion`,1 AS `fecha_operacion`,1 AS `estado` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
+--
+-- Final view structure for view `vw_trazabilidad_returns`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_returns`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_returns` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `usuario_bd`,1 AS `descripcion`,1 AS `fecha_operacion`,1 AS `estado` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
+--
+-- Final view structure for view `vw_trazabilidad_shipments`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_shipments`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_shipments` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `usuario_bd`,1 AS `descripcion`,1 AS `fecha_operacion`,1 AS `estado` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
+--
+-- Final view structure for view `vw_trazabilidad_tb_payment_transactions`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_tb_payment_transactions`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_tb_payment_transactions` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `db_users`,1 AS `description`,1 AS `operation_date`,1 AS `operation_status` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
+--
+-- Final view structure for view `vw_trazabilidad_tb_payments`
+--
+
+/*!50001 DROP VIEW IF EXISTS `vw_trazabilidad_tb_payments`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb3 */;
+/*!50001 SET character_set_results     = utf8mb3 */;
+/*!50001 SET collation_connection      = utf8mb3_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_trazabilidad_tb_payments` AS select 1 AS `log_id`,1 AS `table_name`,1 AS `operation`,1 AS `db_users`,1 AS `description`,1 AS `operation_date`,1 AS `operation_status` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
