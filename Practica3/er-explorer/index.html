@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7fa"><title>ER Explorer · db_test_7b</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">ER</div><div><strong>Schema Studio</strong><small>DATABASE EXPLORER</small></div></div>
+    <div class="source"><span class="live-dot"></span><div><strong>db_test_7b</strong><small>Origen · db_test_7b (4).sql</small></div></div>
+    <div class="top-actions"><span class="snapshot"><i></i> Snapshot del respaldo</span><button class="icon-btn" id="themeButton" title="Cambiar apariencia">◐</button></div>
+  </header>
+  <main>
+    <section class="intro"><div><div class="eyebrow"><span></span> MODELO ENTIDAD–RELACIÓN EXTENDIDO</div><h1>Explora la estructura de tu base de datos.</h1><p>Esquema y filas interpretados desde el archivo SQL local. Selecciona una tabla o sigue sus conexiones.</p></div><div class="source-chip"><span class="file-icon">SQL</span><span><strong>db_test_7b (4).sql</strong><small id="fileState">Preparando lector local…</small></span><label class="upload-button" for="sqlFile">Cambiar archivo</label><input id="sqlFile" type="file" accept=".sql,text/plain" hidden></div></section>
+    <section class="stats" id="stats"></section>
+    <section class="workspace">
+      <div class="diagram-panel">
+        <div class="toolbar"><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Buscar tablas o columnas…"><kbd>⌘ K</kbd></label><span class="toolbar-divider"></span><select id="filter" aria-label="Filtrar tablas"><option value="all">Todas las tablas</option><option value="fk">Con claves foráneas</option><option value="pk">Con clave primaria</option><option value="related">Tablas relacionadas</option><option value="isolated">Sin relaciones</option></select><span class="toolbar-spacer"></span><button class="tool-button" id="attrsToggle" title="Mostrar u ocultar atributos">☷ <span>Atributos</span></button><button class="tool-button" id="cardToggle" title="Mostrar u ocultar cardinalidad">↔ <span>Cardinalidad</span></button><span class="toolbar-divider"></span><button class="tool-button" id="autoLayout" title="Distribución automática">✣ <span>Ordenar</span></button><div class="zoom-controls"><button id="zoomOut" aria-label="Alejar">−</button><span id="zoomLabel">100%</span><button id="zoomIn" aria-label="Acercar">+</button></div><button class="tool-button fit-button" id="fit">⛶ <span>Ajustar</span></button></div>
+        <div class="canvas-wrap" id="canvasWrap"><svg id="diagram" role="application" aria-label="Diagrama interactivo entidad relación"><defs><pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".17"/></pattern><filter id="glow"><feGaussianBlur stdDeviation="3.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect class="grid-bg" width="100%" height="100%" fill="url(#grid)"/><g id="viewport"><g id="edges"></g><g id="nodes"></g></g></svg><div class="canvas-empty" id="canvasEmpty"><span>◈</span><strong>Selecciona un respaldo SQL</strong><small>El archivo permanece en tu dispositivo; se procesa localmente.</small><label for="sqlFile" class="primary-button">Abrir archivo SQL</label></div><div class="canvas-hint"><span>↖</span> Arrastra para mover <b>·</b> Rueda para zoom</div><div class="animation-pill"><button id="animationToggle" aria-label="Pausar animaciones">Ⅱ</button><span id="animationLabel">Flujo activo</span></div><div class="legend"><span><i class="legend-key pk">◆</i> PK</span><span><i class="legend-key fk">↗</i> FK</span><span><i class="legend-key uq">◇</i> UNIQUE</span><span><i class="legend-link"></i> FK declarada</span></div><div class="canvas-message" id="canvasMessage"></div></div>
+        <footer class="canvas-footer"><span><i class="green-dot"></i><span id="parseStatus">Esperando el respaldo</span></span><span>Relaciones derivadas de restricciones SQL declaradas</span></footer>
+      </div>
+      <aside class="details" id="details"><div class="details-empty"><div class="empty-orbit">⌘</div><strong>Selecciona una tabla</strong><p>Haz clic en una entidad para explorar sus columnas, restricciones y dependencias.</p><div class="shortcut-card"><span>⌕</span><div><b>Busca tablas y columnas</b><small>Usa el campo de búsqueda superior</small></div></div></div></aside>
+    </section>
+    <section class="bottom-row"><div class="related-box"><div class="bottom-heading"><span>DEPENDENCIAS</span><strong>Contexto relacional</strong></div><div id="dependencyInfo" class="dependency-empty">Selecciona una tabla para ver sus dependencias directas y explorar una ruta.</div></div><div class="notes-box"><div class="bottom-heading"><span>LECTURA DEL MODELO</span><strong>Fuente y cardinalidad</strong></div><p>Los conteos corresponden únicamente a filas INSERT presentes en el respaldo. La cardinalidad se deriva de PK, índices UNIQUE, nulabilidad y claves foráneas visibles en el esquema.</p><div class="note-tags"><span>● Declarada por FK</span><span>◇ Inferencia estructural</span><span>— Sin conexión en vivo</span></div></div></section>
+    <footer class="app-footer"><span>SCHEMA STUDIO <b>·</b> LECTOR SQL LOCAL</span><span>El archivo no se envía a ningún servidor externo.</span></footer>
+  </main>
+  <div class="tooltip" id="tooltip"></div><script type="module" src="./app.js"></script>
+</body>
+</html>
