@@ -19,7 +19,7 @@ Periodo Septiembre -Diciembre 2026
 > **Catedrático:** M.T.I. Marco A. Ramírez Hernández  
 > **Periodo Académico:** Septiembre - Diciembre 2026
 
-🔗 [📖 Consultar Diccionario de Datos](#) | 🔗 [🗺️ Explorar Modelo MERE](#) *(Reemplaza los `#` con tus enlaces reales)*
+🔗 [📖 Consultar Diccionario de Datos y el Modelo Entidad Relacion](https://y-a-y-a.github.io/Practica_BND_7B_240765/Practica3/modeloERyDiccionario/db_test_7b_modelo_er_diccionario.html)
 
 ---
 
